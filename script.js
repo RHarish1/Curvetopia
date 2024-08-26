@@ -144,3 +144,45 @@ saveImgBtn.addEventListener("click", async () => {
     saveImage(); // Save the image
     await uploadAndAnalyzeImage(); // Send the image to the server
 });
+
+document.querySelector('.choose-img').addEventListener('click', () => {
+    document.querySelector('.file-input').click();
+});
+
+document.querySelector('.file-input').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+        const formData = new FormData();
+        formData.append('image', file);
+
+        // Send image to server for analysis
+        fetch('/analyze', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Display the analyzed image
+            const imgSrc = 'data:image/png;base64,' + data.image;
+            document.querySelector('.preview-img img').src = imgSrc;
+
+            // Display the polygon vertices in the result section
+            const resultOutput = document.getElementById('result-output');
+            resultOutput.textContent = `Vertices: ${JSON.stringify(data.vertices)}`;
+        })
+        .catch(error => console.error('Error:', error));
+    }
+});
+
+document.querySelector('.save-img').addEventListener('click', () => {
+    const img = document.querySelector('.preview-img img').src;
+    const link = document.createElement('a');
+    link.href = img;
+    link.download = 'edited-image.png';
+    link.click();
+});
+
+document.querySelector('.reset-filter').addEventListener('click', () => {
+    document.querySelector('.preview-img img').src = 'image-placeholder.svg';
+    document.getElementById('result-output').textContent = '';
+});

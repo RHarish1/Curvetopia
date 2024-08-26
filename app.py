@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 import io
 
 app = Flask(__name__)
@@ -19,17 +19,29 @@ def generate_polygon(center, radius, num_sides):
 def analyze_image():
     # Load image
     file = request.files['image'].read()
-    image = Image.open(io.BytesIO(file))
+    image = Image.open(io.BytesIO(file)).convert('RGBA')
 
     # Define center and radius for the pentagon
-    center = (250, 250)  # Center of the pentagon
-    radius = 100  # Radius of the circle on which the pentagon is inscribed
+    width, height = image.size
+    center = (width // 2, height // 2)
+    radius = min(center) // 2
 
     # Generate pentagon vertices
-    pentagon_polyline = generate_polygon(center, radius, num_sides=5)
+    pentagon_vertices = generate_polygon(center, radius, num_sides=5)
 
-    # Return the polygon vertices
-    return jsonify(pentagon_polyline)
+    # Draw pentagon on image
+    draw = ImageDraw.Draw(image)
+    draw.polygon(pentagon_vertices, outline="red")
+
+    # Convert image to byte array
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='PNG')
+    img_byte_arr = img_byte_arr.getvalue()
+
+    # Encode image in base64 to return as JSON
+    encoded_img = base64.b64encode(img_byte_arr).decode('utf-8')
+
+    return jsonify({"vertices": pentagon_vertices, "image": encoded_img})
 
 if __name__ == '__main__':
     app.run(debug=True)
