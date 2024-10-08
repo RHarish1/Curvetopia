@@ -1,8 +1,8 @@
-# AdobeCurvetopia
+# Curvetopia
 
 ## Overview
 
-**AdobeCurvetopia** is a tool designed to analyze 2D images or polylines, classify shapes, and evaluate their symmetry. The code processes input images or manually defined polylines, identifies geometric shapes such as triangles, squares, rectangles, circles, etc., and computes various symmetry measures (horizontal, vertical, diagonal, and rotational). The output is an image with the detected shapes labeled and a report on the symmetry of each shape.
+**Curvetopia** is a tool designed to analyze 2D images or polylines, classify shapes, and evaluate their symmetry. The code processes input images or manually defined polylines, identifies geometric shapes such as triangles, squares, rectangles, circles, etc., and computes various symmetry measures (horizontal, vertical, diagonal, and rotational). The output is an image with the detected shapes labeled and a report on the symmetry of each shape.
 
 ## Features
 
