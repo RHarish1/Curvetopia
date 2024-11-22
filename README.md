@@ -17,6 +17,7 @@ The code requires the following Python libraries:
 - OpenCV
 - NumPy
 - Matplotlib
+- Pandas
 
 You can install these dependencies using pip:
 
